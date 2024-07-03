@@ -1,7 +1,6 @@
 import { screen, render, act } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RepositoriesListItem from "./RepositoriesListItem";
-import { expect } from "playwright/test";
 
 // jest.mock("../tree/FileIcon", () => {
 //   return () => {
@@ -47,7 +46,7 @@ test("shows a link to the github repository", async () => {
   //code for testing adding a new link
   const link = screen.getByRole("link", { name: /github repository/i });
   // screen.logTestingPlaygroundURL();
-  // expect(link).toHaveAttribute("href", repository.html_url);
+  expect(link).toHaveAttribute("href", repository.html_url);
 });
 
 test("shows a fileicon with the appropriate icon", async () => {
@@ -55,7 +54,7 @@ test("shows a fileicon with the appropriate icon", async () => {
 
   const icon = await screen.findByRole("img", { name: "JavaScript" });
 
-  // expect(icon).toHaveClass("js-icon");
+  expect(icon).toHaveClass("js-icon");
 });
 
 test("shows a link to the code editor page", async () => {
@@ -67,5 +66,5 @@ test("shows a link to the code editor page", async () => {
     name: new RegExp(repository.owner.login),
   });
 
-  // expect(link).toHaveAttribute("href", `/repositories/${repository.full_name}`);
+  expect(link).toHaveAttribute("href", `/repositories/${repository.full_name}`);
 });

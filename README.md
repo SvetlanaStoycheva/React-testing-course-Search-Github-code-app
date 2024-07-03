@@ -39,7 +39,7 @@ Options for solving Act warning:
 
 - Use a 'findBy' or 'FindAllBy' to detect when the component has finished its data fetching
 - Use an 'act' to control when the data-fetching request gets resolved.
-- Use a module mock to avoid rendering the trablesome componet. (Skip the trablesom component with assynchronous code when rendering the parent component by creating a mock.)
+- Use a **module mock** to avoid rendering the trablesome componet. (Skip the trablesom component with assynchronous code when rendering the parent component by creating a mock.)
   jest.mock("../tree/FileIcon", () => {
   return () => {
   return "File Icon Component";
@@ -51,3 +51,24 @@ Options for solving Act warning:
   });
 
   #### Handling Data Fetching in Tests
+
+  We don't want our components to make actual network request (it slows the proces and changes the data). So we fake the fetched data, we create a fake, mock data to use in our tests. There are different approaches to create mock data.
+
+  - Mock the data that containes the data fetching code (module mock)
+  - Use a library to 'mock' axios: get axios to return fake data. Common library is MSW Library. Instead of our request with fetch or axios to go to outside server this msw library will take the request and return mock data. So we can test our code without leaving the test environment.
+    If we have a get request to an Api, return json with following data.
+    rest.get('api/repositories', (req, res, ctx) => {
+    return res(
+    ctx.json([
+    {
+    // list of repositories
+    }
+    ])
+    );
+    });
+
+  - creating a reusable handlers function, so we can avoid repeating the boilerplate required to set up the MSW.
+
+    **Example in HomeRoute.test.js**
+
+  - Create a menual mock for axios
