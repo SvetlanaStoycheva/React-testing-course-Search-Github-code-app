@@ -8,9 +8,9 @@ https://www.udemy.com/share/107RnM3@GLCZoiPcIODQTU3B_NC5OqH1Atz7lYGqNFD8zumiL3Zi
 
 1. How to run tests:
    open new terminal => npm test
-2. Debug a test and see the DOM output in the terminal
+2. Debug a test and see the DOM output in the terminal =>
    screen.debug(); inside the test
-3. Using Playground to help us select DOM elements
+3. Using Playground to help us select DOM elements =>
    screen.logTestingPlaygroundURL();
    This line in the test code generates a link in the terminal
 
@@ -20,18 +20,15 @@ https://www.udemy.com/share/107RnM3@GLCZoiPcIODQTU3B_NC5OqH1Atz7lYGqNFD8zumiL3Zi
 
 ##### Navigation / Link component in the child components example
 
-When we render a component in a test file we trigger rendering of all of its children. And this children may be connected to some context, they may be provided by an outsite library. Like for example, if we render a component with Link in it, Link is provided by React Router Dom. So we have to accommodate for that.
-In case of a Link child component (navigation) we can import in the test a file MemoryRouter. Then wrapp our component that we want to render and that has a child component Link, in the MemoryRouter. Then when we want to render our component, we will create a Router context, the Link will be displayed (as a child of our component), it will reach out to the context system and will find the memory router and basicaly be happy :)
+When we render a component in a test file we trigger rendering of all of its children. And these children may be connected to some context, they may be provided by an outsite library. Like for example, if we render a component with Link in it, Link is provided by React Router Dom. So we have to accommodate for that.
+In case of a Link child component (navigation) we can import in the test file MemoryRouter. Then wrapp our component that we want to render and that has a child component Link, in the MemoryRouter. Then when we want to render our component, we will create a Router context, the Link will be displayed (as a child of our component), it will reach out to the context system and will find the memory router and basicaly be happy :)
 
 ##### act() warning
 
 - will occur frequently if you fetch data in useEffect() or any time you have any type of assynchronous code inside of useEffect. When we see these worning normally it means we didn't wait long enough for our states to change.
   act() is a function implemented by React Dom. If we are **not using RTL** we must call our functions that lead to state changes (on button click etc.) inside of this act(). Because act creates a time window for us where a state can change, it gives time for all asynchronous operations to run in our fake test environment (simulate click on button => click handler runs => fake data request occurs => state updates => users are visible on the screen => check for users on screen => users are visible).
-  act(() => {
-  render(<UserList/>, container)
-  })
 
-  If we use RTL, it runs act() for us behind the scenes. If we use the asynchronous functions provided by RTL (screen.findBy..., waitFor, user.click, user.keyboard). All this functions will call automatically act() behind the scenes.
+  If we use RTL, it runs act() for us behind the scenes. If we use the asynchronous functions provided by RTL (screen.findBy..., waitFor, user.click, user.keyboard), all this functions will call automatically act() behind the scenes.
 
   When we see these act worning in the terminal, we do not do what our terminal says (you must wrapp your state changes in act()). Instead you use one of RTL's functions.
 
@@ -50,7 +47,7 @@ Options for solving Act warning:
   await pause();
   });
 
-  #### Handling Data Fetching in Tests
+  #### Handling Data Fetching in Tests / Example in HomeRoute.test.js
 
   We don't want our components to make actual network request (it slows the proces and changes the data). So we fake the fetched data, we create a fake, mock data to use in our tests. There are different approaches to create mock data.
 
@@ -67,8 +64,6 @@ Options for solving Act warning:
     );
     });
 
-  - creating a reusable handlers function, so we can avoid repeating the boilerplate required to set up the MSW.
-
-    **Example in HomeRoute.test.js**
+  Creating a reusable handlers function, so we can avoid repeating the boilerplate required to set up the MSW. (example in src/test/server.js)
 
   - Create a menual mock for axios
