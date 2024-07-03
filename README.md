@@ -47,23 +47,37 @@ Options for solving Act warning:
   await pause();
   });
 
-  #### Handling Data Fetching in Tests / Example in HomeRoute.test.js
+  To debug act() warning, we can write inside of our test func:\
+   screen.debug(); await pause(); screen.debug().\
+   const pause = () => new Promise((resolve) => setTimeout(resolve, 100));\
+  So, we can see how the DOM is changing after waiting and that can give us an idea from where the warning is comming.\
+   If after pause we see a link tag, for example, that means that we need to await for a link info to be fetched. So, we can add:\
+   await screen.findByRole("link");
 
-  We don't want our components to make actual network request (it slows the proces and changes the data). So we fake the fetched data, we create a fake, mock data to use in our tests. There are different approaches to create mock data.
+#### Handling Data Fetching in Tests / Example in HomeRoute.test.js
 
-  - Mock the data that containes the data fetching code (module mock)
-  - Use a library to 'mock' axios: get axios to return fake data. Common library is MSW Library. Instead of our request with fetch or axios to go to outside server this msw library will take the request and return mock data. So we can test our code without leaving the test environment.
-    If we have a get request to an Api, return json with following data.
-    rest.get('api/repositories', (req, res, ctx) => {
-    return res(
-    ctx.json([
-    {
-    // list of repositories
-    }
-    ])
-    );
-    });
+We don't want our components to make actual network request (it slows the proces and changes the data). So we fake the fetched data, we create a fake, mock data to use in our tests. There are different approaches to create mock data.
 
-  Creating a reusable handlers function, so we can avoid repeating the boilerplate required to set up the MSW. (example in src/test/server.js)
+- Mock the data that containes the data fetching code (module mock)
+- Use a library to 'mock' axios: get axios to return fake data. Common library is MSW Library. Instead of our request with fetch or axios to go to outside server this msw library will take the request and return mock data. So we can test our code without leaving the test environment.
+  If we have a get request to an Api, return json with following data.
+  rest.get('api/repositories', (req, res, ctx) => {
+  return res(
+  ctx.json([
+  {
+  // list of repositories
+  }
+  ])
+  );
+  });
 
-  - Create a menual mock for axios
+Creating a reusable handlers function, so we can avoid repeating the boilerplate required to set up the MSW. (example in src/test/server.js)
+
+- Create a menual mock for axios
+
+#### Tests regarding authentication / The goal is to better understand how to trableshoot libraries in test / example in src/components/auth/AuthButtons.test.js
+
+AuthButtons => useUser => SWR => Axios => Api
+
+- Scoping test hooks / Test nesting
+  In the test files, jest runs first all functions (that are not test), collects all test functions and runs them all together at the end. If we want to change this order we need to do test nesting. We use describe func, where we wrapp the createServer with it's test and so we create a scope where the beforeAll, afterAll functions run.
