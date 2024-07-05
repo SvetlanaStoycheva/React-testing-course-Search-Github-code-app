@@ -14,7 +14,7 @@ https://www.udemy.com/share/107RnM3@GLCZoiPcIODQTU3B_NC5OqH1Atz7lYGqNFD8zumiL3Zi
    screen.logTestingPlaygroundURL();
    This line in the test code generates a link in the terminal
 
-### Theory
+### Test files in this project: HomeRoute.test.js, RepositoriesSummary.test.js, RepositoriesListItem.test.js, AuthButtons.test.js
 
 #### Introducing to three of the hardest aspects of testing: Module mocks, Navigation, 'act'; Examples in RepositoriesListItem.test.js
 
@@ -25,12 +25,13 @@ In case of a Link child component (navigation) we can import in the test file Me
 
 ##### act() warning
 
-- will occur frequently if you fetch data in useEffect() or any time you have any type of assynchronous code inside of useEffect. When we see these worning normally it means we didn't wait long enough for our states to change.
-  act() is a function implemented by React Dom. If we are **not using RTL** we must call our functions that lead to state changes (on button click etc.) inside of this act(). Because act creates a time window for us where a state can change, it gives time for all asynchronous operations to run in our fake test environment (simulate click on button => click handler runs => fake data request occurs => state updates => users are visible on the screen => check for users on screen => users are visible).
+Will occur frequently if you fetch data in useEffect() or any time you have any type of assynchronous code inside of useEffect. When we see these worning normally it means we didn't wait long enough for our states to change.
 
-  If we use RTL, it runs act() for us behind the scenes. If we use the asynchronous functions provided by RTL (screen.findBy..., waitFor, user.click, user.keyboard), all this functions will call automatically act() behind the scenes.
+act() is a function implemented by React Dom. If we are **not using RTL** we must call our functions that lead to state changes (on button click etc.) inside of this act(). Because act creates a time window for us where a state can change, it gives time for all asynchronous operations to run in our fake test environment (simulate click on button => click handler runs => fake data request occurs => state updates => users are visible on the screen => check for users on screen => users are visible).
 
-  When we see these act worning in the terminal, we do not do what our terminal says (you must wrapp your state changes in act()). Instead you use one of RTL's functions.
+If we use RTL, it runs act() for us behind the scenes. If we use the asynchronous functions provided by RTL (screen.findBy..., waitFor, user.click, user.keyboard), all this functions will call automatically act() behind the scenes.
+
+When we see these act worning in the terminal, we do not do what our terminal says (you must wrapp your state changes in act()). Instead you use one of RTL's functions.
 
 Options for solving Act warning:
 
@@ -81,3 +82,14 @@ AuthButtons => useUser => SWR => Axios => Api
 
 - Scoping test hooks / Test nesting
   In the test files, jest runs first all functions (that are not test), collects all test functions and runs them all together at the end. If we want to change this order we need to do test nesting. We use describe func, where we wrapp the createServer with it's test and so we create a scope where the beforeAll, afterAll functions run.
+
+#### Options for debugging tests:
+
+- to run only one test: instead of describe(...) => use describe.only / or test.only
+- set up a debugger => write debugger; in a component or test file.
+
+1. in package.json => in "scripts":{...} after "test":.... add => "test:debug": "test-scripts --inspect-brc test -- ...
+2. in a new vs code terminal => npm run test:debug (it will run our test in a special mode, it will stop on the first debugger statemnet it finds )
+3. Go to the browser => write the following url: about:inspect => in the browser window we will see or running test process, we can click 'inspect' (link in the window) => and we see what is gooing on inside of our test.
+
+- clasic console.log
